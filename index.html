@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Request User</title>
+
+  <!-- Google Fonts (Inter sebagai fallback yang sangat mirip SF Pro) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=SF+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* --- RESET & APPLE DESIGN SYSTEM VARIABLES --- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    :root {
+      --bg-primary: #f5f5f7;
+      --bg-card: #ffffff;
+      --bg-input: #f5f5f7;
+      --bg-hover: #e8e8ed;
+
+      --border-subtle: #d2d2d7;
+      --border-focus: #0071e3;
+
+      --text-primary: #1d1d1f;
+      --text-secondary: #6e6e73;
+      --text-muted: #86868b;
+
+      --accent-blue: #0071e3;
+      --accent-blue-soft: #e8f2ff;
+      --accent-red: #ff3b30;
+      --accent-green: #34c759;
+
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+      
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", 'Inter', sans-serif;
+      --font-mono: "SF Mono", SFMono-Regular, ui-monospace, monospace;
+
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    /* --- WRAPPER (MOBILE FIRST) --- */
+    .app-wrapper {
+      max-width: 480px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* --- HEADER --- */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 8px 8px 8px;
+    }
+
+    .brand h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+    }
+    
+    .brand .sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .badge-version {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-hover);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-family: var(--font-mono);
+    }
+
+    /* --- CARDS --- */
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(0,0,0,0.02);
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    /* --- FORM LAYOUT --- */
+    .form-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* --- FIELD COMPONENTS --- */
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    
+    .field label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      padding-left: 2px;
+    }
+    
+    .field label .opt {
+      color: var(--text-muted);
+      font-weight: 400;
+      font-size: 11px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    
+    .input-wrapper input, input[type="text"] {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid transparent;
+      color: var(--text-primary);
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      outline: none;
+      transition: var(--transition);
+      font-family: var(--font-sans);
+    }
+
+    /* Monospace khusus input data teknis */
+    #username, #password, #localAddress, #remoteAddress {
+      font-family: var(--font-mono);
+      font-size: 14px;
+    }
+
+    .input-wrapper input::placeholder, input::placeholder {
+      color: var(--text-muted);
+      font-family: var(--font-sans);
+    }
+    
+    .input-wrapper input:focus, input[type="text"]:focus {
+      background: var(--bg-card);
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.15);
+    }
+
+    .gen-btn {
+      position: absolute;
+      right: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--accent-blue);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+    
+    .gen-btn:active {
+      transform: scale(0.9);
+      background: var(--bg-input);
+    }
+
+    /* --- SERVICE BADGE (APPLE STYLE) --- */
+    .service-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-input);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    
+    .service-badge .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-green);
+    }
+
+    .hint-text {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      margin-top: 2px;
+      padding: 0 2px;
+    }
+
+    /* --- TERMINAL (CLEAN LOOK) --- */
+    .terminal {
+      background: #fafafa;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    
+    .term-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: #f1f1f4;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    
+    .term-path {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+    
+    .term-body {
+      padding: 14px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.5;
+      color: #24292e;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    
+    .term-body .cursor-blink {
+      display: inline-block;
+      width: 2px;
+      height: 14px;
+      background: var(--accent-blue);
+      vertical-align: middle;
+      margin-left: 4px;
+      animation: blink 1s step-end infinite;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* --- BUTTONS & ACTIONS --- */
+    .btn {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 600;
+      padding: 14px 20px;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: var(--transition);
+      width: 100%;
+    }
+    
+    .btn-primary {
+      background: var(--accent-blue);
+      color: #ffffff;
+    }
+    
+    .btn-primary:active {
+      background: #0062c4;
+    }
+    
+    .btn-secondary {
+      background: var(--accent-blue-soft);
+      color: var(--accent-blue);
+    }
+    
+    .btn-secondary:active {
+      background: #d0e5ff;
+    }
+    
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* --- STATUS MESSAGE --- */
+    .status-msg {
+      font-size: 13px;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      margin-top: 12px;
+      display: none;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    
+    .status-msg.show {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .status-msg.ok {
+      background: #e6f9ed;
+      color: var(--accent-green);
+    }
+    
+    .status-msg.err {
+      background: #ffebeb;
+      color: var(--accent-red);
+    }
+    
+    .status-msg.info {
+      background: var(--accent-blue-soft);
+      color: var(--accent-blue);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-wrapper">
+
+    <!-- HEADER -->
+    <header class="app-header">
+      <div class="brand">
+        <h1>Create User</h1>
+        <div class="sub">Database Management</div>
+      </div>
+      <span class="badge-version">v2.0</span>
+    </header>
+
+    <!-- CARD: DATA USER -->
+    <section class="card">
+      <div class="card-title"> 01. Data User</div>
+      <div class="form-grid">
+        
+        <!-- Row 1: Username & Password -->
+        <div class="form-row">
+          <div class="field">
+            <label for="username">Username</label>
+            <div class="input-wrapper">
+              <input type="text" id="username" placeholder="SN ONT / Nama" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="input-wrapper">
+              <input type="text" id="password" placeholder="Acak" />
+              <button class="gen-btn" title="Generate password" onclick="genPassword()">⟳</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: Service & Profile -->
+        <div class="form-row">
+          <div class="field">
+            <label>Service</label>
+            <div class="service-badge">
+              <span class="dot"></span> pppoe
+            </div>
+          </div>
+          <div class="field">
+            <label>Profile</label>
+            <div class="service-badge">
+              <span class="dot"></span> pppoe
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 3: Local & Remote Address -->
+        <div class="form-row">
+          <div class="field">
+            <label for="localAddress">Local IP <span class="opt">(Opsional)</span></label>
+            <input type="text" id="localAddress" placeholder="10.20.30.1" />
+          </div>
+          <div class="field">
+            <label for="remoteAddress">Remote IP <span class="opt">(Opsional)</span></label>
+            <input type="text" id="remoteAddress" placeholder="10.20.30.15" />
+          </div>
+        </div>
+        <div class="hint-text">Kosongkan jika ingin menggunakan alamat otomatis dari Routerboard.</div>
+
+        <!-- Row 4: Nama Pelanggan -->
+        <div class="field">
+          <label for="comment">Nama Pelanggan / Keterangan</label>
+          <input type="text" id="comment" placeholder="Contoh - Jl. Melati No.5" />
+        </div>
+
+        <!-- TERMINAL PREVIEW -->
+        <div class="terminal">
+          <div class="term-header">
+            <span class="term-path">/ppp/secret preview</span>
+          </div>
+          <div class="term-body" id="termBody"></div>
+        </div>
+
+        <!-- ACTION COPY -->
+        <button class="btn btn-secondary" onclick="copyScript()"> Salin Kode CLI</button>
+
+      </div>
+    </section>
+
+    <!-- CARD: SEND TO ADMIN -->
+    <section class="card">
+      <div class="card-title"> 02. Kirim Data</div>
+      <div class="form-grid">
+        <div class="form-row">
+          <div class="field">
+            <label for="senderName">Nama Pengirim</label>
+            <input type="text" id="senderName" placeholder="Nama Anda" />
+          </div>
+          <div class="field">
+            <label for="senderSite">Lokasi / Cabang</label>
+            <input type="text" id="senderSite" placeholder="Cabang A" />
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="sendToAdmin()" id="btnSend">
+          Kirim ke Administrator
+        </button>
+        
+        <div class="status-msg" id="sendStatus"></div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    /* =========================================================
+       KONFIGURASI TELEGRAM — GANTI DENGAN TOKEN & CHAT ID ANDA
+       ========================================================= */
+    const TELEGRAM_BOT_TOKEN = "8791910437:AAF5-pwMuLVeMxxOo4PVeyLiFDG_-HTAaW0";
+    const TELEGRAM_CHAT_ID = "8264592549";
+
+    // ---- HELPERS ----
+    function esc(v) {
+      return (v || '').toString().trim();
+    }
+
+    function randomPassword(len = 8) {
+      const chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789';
+      let out = '';
+      for (let i = 0; i < len; i++) {
+        out += chars[Math.floor(Math.random() * chars.length)];
+      }
+      return out;
+    }
+
+    function genPassword() {
+      document.getElementById('password').value = randomPassword();
+      renderAll();
+    }
+
+    // ---- BUILD CLI ----
+    function buildCli() {
+      const username = esc(document.getElementById('username').value) || '<ISI_USERNAME>';
+      const password = esc(document.getElementById('password').value) || '<ISI_PASSWORD>';
+      const local = esc(document.getElementById('localAddress').value);
+      const remote = esc(document.getElementById('remoteAddress').value);
+      const comment = esc(document.getElementById('comment').value);
+
+      let cli = `/ppp secret add name="${username}" password="${password}" service=pppoe profile=pppoe`;
+      if (local) cli += ` local-address=${local}`;
+      if (remote) cli += ` remote-address=${remote}`;
+      if (comment) cli += ` comment="${comment.replace(/"/g, '')}"`;
+      return cli;
+    }
+
+    // ---- RENDER TERMINAL ----
+    function renderAll() {
+      const cli = buildCli();
+      window.__latestCli = cli;
+      const term = document.getElementById('termBody');
+      term.innerHTML = cli.replace(/</g, '&lt;') + '<span class="cursor-blink"></span>';
+    }
+
+    // ---- COPY ----
+    function copyScript() {
+      const text = window.__latestCli || '';
+      navigator.clipboard.writeText(text).then(() => {
+        flashStatus('info', 'CLI disalin ke clipboard.');
+      }).catch(() => {
+        flashStatus('err', 'Gagal menyalin secara otomatis.');
+      });
+    }
+
+    // ---- STATUS ----
+    function flashStatus(type, msg) {
+      const el = document.getElementById('sendStatus');
+      el.className = 'status-msg show ' + type;
+      el.textContent = msg;
+    }
+
+    // ---- SEND TO TELEGRAM ----
+    async function sendToAdmin() {
+      if (TELEGRAM_BOT_TOKEN.startsWith('PASTE_') || TELEGRAM_CHAT_ID.startsWith('PASTE_')) {
+        flashStatus('err', 'Token Telegram belum diatur dengan benar.');
+        return;
+      }
+
+      const sender = esc(document.getElementById('senderName').value);
+      const site = esc(document.getElementById('senderSite').value);
+      const username = esc(document.getElementById('username').value);
+
+      if (!sender || !site) {
+        flashStatus('err', ' Mohon isi Nama Pengirim dan Lokasi.');
+        return;
+      }
+      if (!username) {
+        flashStatus('err', 'Mohon isi Username terlebih dahulu.');
+        return;
+      }
+
+      const btn = document.getElementById('btnSend');
+      btn.disabled = true;
+      flashStatus('info', '⏳ Sedang mengirim...');
+
+      const cli = window.__latestCli || buildCli();
+      const text =
+        `*User PPPoE Baru* \n\n` +
+        `Pengirim: ${sender}\n` +
+        ` Lokasi: ${site}\n\n` +
+        `*CLI:*\n` +
+        `\`\`\`\n${cli}\n\`\`\``;
+
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: text,
+            parse_mode: 'Markdown'
+          })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          flashStatus('ok', ' Terkirim ke Telegram Administrator!');
+        } else {
+          flashStatus('err', `❌ Gagal: ${data.description || 'Terjadi kesalahan'}`);
+        }
+      } catch (err) {
+        flashStatus('err', '❌ Gagal mengirim. Periksa koneksi internet Anda.');
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    // ---- AUTO RENDER ON INPUT ----
+    document.querySelectorAll('input').forEach(el => {
+      el.addEventListener('input', renderAll);
+    });
+
+    // ---- INIT ----
+    renderAll();
+  </script>
+
+</body>
+</html>
