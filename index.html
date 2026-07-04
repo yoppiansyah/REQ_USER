@@ -458,13 +458,13 @@
             <input type="text" id="senderName" placeholder="Nama Anda" />
           </div>
           <div class="field">
-            <label for="senderSite">Lokasi / Cabang</label>
-            <input type="text" id="senderSite" placeholder="Cabang A" />
+            <label for="senderSite">Lokasi / Tempat </label>
+            <input type="text" id="senderSite" placeholder=" LLG " />
           </div>
         </div>
 
         <button class="btn btn-primary" onclick="sendToAdmin()" id="btnSend">
-          Kirim ke Administrator
+          Kirim Data Center
         </button>
         
         <div class="status-msg" id="sendStatus"></div>
@@ -565,9 +565,9 @@
 
       const cli = window.__latestCli || buildCli();
       const text =
-        `*User PPPoE Baru* \n\n` +
+        `*Request Create User* \n\n` +
         `Pengirim: ${sender}\n` +
-        ` Lokasi: ${site}\n\n` +
+        `Lokasi: ${site}\n\n` +
         `*CLI:*\n` +
         `\`\`\`\n${cli}\n\`\`\``;
 
@@ -583,12 +583,12 @@
         });
         const data = await res.json();
         if (data.ok) {
-          flashStatus('ok', ' Terkirim ke Telegram Administrator!');
+          flashStatus('ok', ' Terkirim ke Database!');
         } else {
-          flashStatus('err', `❌ Gagal: ${data.description || 'Terjadi kesalahan'}`);
+          flashStatus('err', `Gagal: ${data.description || 'Terjadi kesalahan'}`);
         }
       } catch (err) {
-        flashStatus('err', '❌ Gagal mengirim. Periksa koneksi internet Anda.');
+        flashStatus('err', 'Gagal mengirim. Periksa koneksi internet Anda.');
       } finally {
         btn.disabled = false;
       }
