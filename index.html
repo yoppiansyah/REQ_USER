@@ -370,7 +370,7 @@
       <div class="form-grid">
         <div class="form-row">
           <div class="field">
-            <label for="senderName">Petugas Lapangan</label>
+            <label for="senderName">Pengirim</label>
             <input type="text" id="senderName" placeholder="Nama Lengkap" />
           </div>
           <div class="field">
@@ -379,7 +379,7 @@
           </div>
         </div>
 
-        <button class="btn btn-primary" onclick="sendToAdmin()" id="btnSend">Kirim ke Sistem Pusat</button>
+        <button class="btn btn-primary" onclick="sendToAdmin()" id="btnSend">Kirim</button>
         <div class="status-msg" id="sendStatus"></div>
       </div>
     </section>
@@ -483,11 +483,11 @@
       const username = esc(document.getElementById('username').value);
 
       if (!sender || !site) {
-        flashStatus('err', '⚠️ Lengkapi Nama Petugas dan ID Node!');
+        flashStatus('err', 'Lengkapi Nama Pengirim dan ID Node!');
         return;
       }
       if (!username) {
-        flashStatus('err', '⚠️ Harap tentukan Username/SN ONT dahulu!');
+        flashStatus('err', 'Harap tentukan Username/SN ONT dahulu!');
         return;
       }
 
@@ -497,10 +497,10 @@
 
       const cli = window.__latestCli || buildCli();
       const text =
-        `⚡ *INTRADEV - REQUEST PPPoE Secret* ⚡\n\n` +
+        `*INTRADEV - REQUEST CREATE USER* \n\n` +
         `👤 *Petugas:* ${sender}\n` +
         `📍 *Node Site:* ${site}\n\n` +
-        `⚙️ *RouterOS Execution Command:*\n` +
+        `*RouterOS Execution Command:*\n` +
         `\`\`\`\n${cli}\n\`\`\``;
 
       try {
@@ -515,12 +515,12 @@
         });
         const data = await res.json();
         if (data.ok) {
-          flashStatus('ok', '✅ Data tersinkronisasi dan berhasil dikirim!');
+          flashStatus('ok', 'Data tersinkronisasi dan berhasil dikirim!');
         } else {
-          flashStatus('err', `❌ Gagal: ${data.description || 'Sistem Error'}`);
+          flashStatus('err', `Gagal: ${data.description || 'Sistem Error'}`);
         }
       } catch (err) {
-        flashStatus('err', '❌ Masalah jaringan. Sinkronisasi gagal.');
+        flashStatus('err', 'Masalah jaringan. Sinkronisasi gagal.');
       } finally {
         btn.disabled = false;
       }
