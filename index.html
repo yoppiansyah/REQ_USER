@@ -3,419 +3,339 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Request User</title>
+  <title>INTRADEV — Create User Database</title>
 
-  <!-- Google Fonts (Inter sebagai fallback yang sangat mirip SF Pro) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-11.5 -10.23174 23 20.46348'%3E%3Ccircle cx='0' cy='0' r='2.05' fill='%2361dafb'/%3E%3Cg stroke='%2361dafb' stroke-width='1' fill='none'%3E%3Cellipse rx='11' ry='4.2'/%3E%3Cellipse rx='11' ry='4.2' transform='rotate(60)'/%3E%3Cellipse rx='11' ry='4.2' transform='rotate(120)'/%3E%3C/g%3E%3C/svg%3E" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=SF+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
 
   <style>
-    /* --- RESET & APPLE DESIGN SYSTEM VARIABLES --- */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing: antialiased; }
 
     :root {
-      --bg-primary: #f5f5f7;
+      --bg-body: #eef1f6;
+      --bg-noise: radial-gradient(circle at 15% 10%, rgba(28,74,110,0.06), transparent 40%),
+                  radial-gradient(circle at 85% 90%, rgba(196,145,26,0.07), transparent 40%);
       --bg-card: #ffffff;
-      --bg-input: #f5f5f7;
-      --bg-hover: #e8e8ed;
-
-      --border-subtle: #d2d2d7;
-      --border-focus: #0071e3;
-
-      --text-primary: #1d1d1f;
-      --text-secondary: #6e6e73;
-      --text-muted: #86868b;
-
-      --accent-blue: #0071e3;
-      --accent-blue-soft: #e8f2ff;
+      --bg-section: #f6f8fb;
+      --text-primary: #0d1b2a;
+      --text-secondary: #556174;
+      --text-muted: #93a0b4;
+      --border-color: #e3e8f0;
+      --shadow: 0 20px 50px -15px rgba(13,27,42,0.12);
+      --shadow-hover: 0 30px 60px -12px rgba(13,27,42,0.18);
+      --input-bg: #f8fafc;
+      --input-border: #dfe6ef;
+      
+      --btn-primary: linear-gradient(135deg,#12324d,#1c4a6e);
+      --btn-primary-hover: linear-gradient(135deg,#173e63,#245a83);
+      --btn-secondary: #e8f2ff;
+      --btn-secondary-text: #1c4a6e;
+      
+      --splash-bg: #ffffff;
+      --intra-color: #173e63;
+      --dev-color: #c4911a;
+      --toast-bg: #12324d;
+      
+      --accent-green: #1f7a4d;
       --accent-red: #ff3b30;
-      --accent-green: #34c759;
-
-      --radius-lg: 18px;
-      --radius-md: 12px;
-      --radius-sm: 8px;
-      
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-      --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
-      
-      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", 'Inter', sans-serif;
-      --font-mono: "SF Mono", SFMono-Regular, ui-monospace, monospace;
-
-      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --term-bg: #0f172a;
+      --term-text: #38bdf8;
+      --term-header: #1e293b;
+      --term-border: #334155;
     }
+
+    body.dark {
+      --bg-body: #070c14;
+      --bg-noise: radial-gradient(circle at 15% 10%, rgba(74,158,255,0.08), transparent 40%),
+                  radial-gradient(circle at 85% 90%, rgba(212,161,23,0.09), transparent 40%);
+      --bg-card: #0e1826;
+      --bg-section: #0b1520;
+      --text-primary: #f3f6fb;
+      --text-secondary: #a7b4c8;
+      --text-muted: #63758f;
+      --border-color: #1c2a3d;
+      --shadow: 0 30px 70px -18px rgba(0,0,0,0.5);
+      --shadow-hover: 0 36px 80px -16px rgba(0,0,0,0.6);
+      --input-bg: #0a121d;
+      --input-border: #20334a;
+      
+      --btn-primary: linear-gradient(135deg,#3f8fdb,#5aa8ec);
+      --btn-primary-hover: linear-gradient(135deg,#529fe8,#6fb6f4);
+      --btn-secondary: rgba(90, 168, 236, 0.15);
+      --btn-secondary-text: #5aa8ec;
+      
+      --splash-bg: #070c14;
+      --intra-color: #5aa8ec;
+      --dev-color: #e6b93a;
+      --toast-bg: #16283c;
+      
+      --accent-green: #4fd48c;
+      --term-bg: #050b14;
+      --term-text: #4ade80;
+      --term-header: #0d1520;
+      --term-border: #1e293b;
+    }
+
+    html, body { min-height: 100dvh; }
 
     body {
-      font-family: var(--font-sans);
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-body);
+      background-image: var(--bg-noise);
       display: flex;
       justify-content: center;
-      padding: 16px;
+      align-items: flex-start;
+      padding: 24px 16px;
+      transition: background 0.5s ease, color 0.5s ease;
+      overflow-x: hidden;
     }
 
-    /* --- WRAPPER (MOBILE FIRST) --- */
-    .app-wrapper {
-      max-width: 480px;
-      width: 100%;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+    /* ===== SPLASH SCREEN ===== */
+    #splashScreen {
+      position: fixed; inset: 0; background: var(--splash-bg);
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      z-index: 9999; transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+    #splashScreen.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+
+    .bubble {
+      position: absolute; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(97, 218, 251, 0.05), rgba(97, 218, 251, 0.01));
+      animation: bubbleFloat 12s ease-in-out infinite; pointer-events: none;
+    }
+    .bubble:nth-child(1) { width: 200px; height: 200px; top: -50px; left: -80px; }
+    .bubble:nth-child(2) { width: 300px; height: 300px; bottom: -100px; right: -100px; animation-delay: 2s; }
+    body.dark .bubble { background: radial-gradient(circle at 30% 30%, rgba(97, 218, 251, 0.07), rgba(97, 218, 251, 0.02)); }
+
+    @keyframes bubbleFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+      50% { transform: translate(15px, -20px) scale(1.05); opacity: 0.6; }
     }
 
-    /* --- HEADER --- */
-    .app-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 8px 8px 8px;
+    .splash-container { text-align: center; display: flex; flex-direction: column; gap: 12px; z-index: 2; }
+    .splash-logo { font-family: 'Sora', sans-serif; font-size: 42px; font-weight: 800; letter-spacing: 4px; }
+    .splash-logo .s-intra { color: var(--intra-color); }
+    .splash-logo .s-dev { color: var(--dev-color); }
+    .splash-sub { color: #63758f; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; font-weight: 600; }
+    .splash-bar { width: 160px; height: 2px; background: rgba(0,0,0,0.05); margin: 8px auto 0; border-radius: 2px; overflow: hidden; position: relative; }
+    body.dark .splash-bar { background: rgba(255,255,255,0.05); }
+    .splash-bar::after {
+      content: ''; display: block; height: 100%; width: 40%;
+      background: linear-gradient(90deg, var(--intra-color), var(--dev-color));
+      animation: barSlide 1.6s ease-in-out infinite;
     }
+    @keyframes barSlide { 0% { transform: translateX(-100%); } 100% { transform: translateX(250%); } }
 
-    .brand h1 {
-      font-size: 24px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      color: var(--text-primary);
+    /* ===== DARK MODE TOGGLE ===== */
+    .dark-toggle {
+      position: fixed; top: 16px; right: 16px; z-index: 100;
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: 50px; padding: 10px 16px; cursor: pointer;
+      display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow);
+      transition: all 0.3s ease; color: var(--text-primary);
     }
-    
-    .brand .sub {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-top: 2px;
-    }
+    .dark-toggle:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+    .dark-toggle svg { width: 16px; height: 16px; }
+    .toggle-label { font-size: 12px; font-weight: 600; }
 
-    .badge-version {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      background: var(--bg-hover);
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-family: var(--font-mono);
-    }
+    /* ===== MAIN LAYOUT ===== */
+    .app-wrapper { max-width: 460px; width: 100%; display: flex; flex-direction: column; gap: 20px; margin-top: 40px; }
 
-    /* --- CARDS --- */
+    /* ===== HEADER ===== */
+    .app-header { text-align: center; padding: 10px 0; }
+    .brand-title { font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: 0.5px; }
+    .brand-title .b-intra { color: var(--intra-color); }
+    .brand-title .b-dev { color: var(--dev-color); }
+    .slogan { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2.5px; margin-top: 4px; font-weight: 600; }
+
+    /* ===== CARDS ===== */
     .card {
-      background: var(--bg-card);
-      border-radius: var(--radius-lg);
-      padding: 20px;
-      box-shadow: var(--shadow-sm);
-      border: 1px solid rgba(0,0,0,0.02);
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: 20px; padding: 28px 24px; box-shadow: var(--shadow);
+      transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.4s ease, opacity 0.6s ease, transform 0.6s ease;
+      opacity: 0; transform: translateY(20px);
     }
-
+    .card.show { opacity: 1; transform: translateY(0); }
+    .card:hover { box-shadow: var(--shadow-hover); }
+    
     .card-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 16px;
+      font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700;
+      color: var(--dev-color); text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 20px; border-left: 3px solid var(--intra-color); padding-left: 10px;
     }
 
-    /* --- FORM LAYOUT --- */
-    .form-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
+    /* ===== FORM LAYOUT ===== */
+    .form-grid { display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
+    /* ===== COMPONENTS ===== */
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label { font-size: 12px; font-weight: 600; color: var(--text-secondary); padding-left: 2px; }
+    .field label .opt { color: var(--text-muted); font-weight: 400; font-size: 11px; }
 
-    /* --- FIELD COMPONENTS --- */
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+    .input-wrapper { position: relative; display: flex; align-items: center; }
     
-    .field label {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-primary);
-      padding-left: 2px;
+    input[type="text"] {
+      width: 100%; background: var(--input-bg); border: 1.5px solid var(--input-border);
+      color: var(--text-primary); padding: 12px 14px; border-radius: 12px;
+      font-size: 14px; outline: none; transition: all 0.25s ease;
+      font-family: 'Inter', sans-serif;
     }
-    
-    .field label .opt {
-      color: var(--text-muted);
-      font-weight: 400;
-      font-size: 11px;
-    }
-
-    .input-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-    
-    .input-wrapper input, input[type="text"] {
-      width: 100%;
-      background: var(--bg-input);
-      border: 1px solid transparent;
-      color: var(--text-primary);
-      padding: 12px 14px;
-      border-radius: var(--radius-md);
-      font-size: 15px;
-      outline: none;
-      transition: var(--transition);
-      font-family: var(--font-sans);
+    input[type="text"]:focus {
+      border-color: var(--intra-color);
+      box-shadow: 0 0 0 3px rgba(90, 168, 236, 0.15);
+      background: var(--bg-card);
     }
 
-    /* Monospace khusus input data teknis */
     #username, #password, #localAddress, #remoteAddress {
-      font-family: var(--font-mono);
-      font-size: 14px;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600;
     }
 
-    .input-wrapper input::placeholder, input::placeholder {
-      color: var(--text-muted);
-      font-family: var(--font-sans);
-    }
-    
-    .input-wrapper input:focus, input[type="text"]:focus {
-      background: var(--bg-card);
-      border-color: var(--border-focus);
-      box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.15);
-    }
-
+    /* BUTTON GENERATE */
     .gen-btn {
-      position: absolute;
-      right: 8px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      color: var(--accent-blue);
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: var(--shadow-sm);
-      transition: var(--transition);
+      position: absolute; right: 8px; background: var(--bg-card);
+      border: 1px solid var(--border-color); color: var(--intra-color);
+      width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+      font-size: 16px; display: flex; align-items: center; justify-content: center;
+      box-shadow: var(--shadow); transition: all 0.2s ease;
     }
-    
-    .gen-btn:active {
-      transform: scale(0.9);
-      background: var(--bg-input);
-    }
+    .gen-btn:hover { border-color: var(--intra-color); background: var(--input-bg); }
+    .gen-btn:active { transform: scale(0.9); }
 
-    /* --- SERVICE BADGE (APPLE STYLE) --- */
+    /* BADGE STATUS PROFIL */
     .service-badge {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--bg-input);
-      border-radius: var(--radius-md);
-      padding: 12px 14px;
-      font-family: var(--font-mono);
-      font-size: 14px;
-      color: var(--text-primary);
-      font-weight: 500;
+      display: flex; align-items: center; gap: 8px; background: var(--input-bg);
+      border: 1.5px solid var(--input-border); border-radius: 12px;
+      padding: 11px 14px; font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; color: var(--text-primary); font-weight: 700; text-transform: uppercase;
     }
-    
-    .service-badge .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--accent-green);
-    }
+    .service-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-green); }
 
-    .hint-text {
-      font-size: 12px;
-      color: var(--text-secondary);
-      line-height: 1.4;
-      margin-top: 2px;
-      padding: 0 2px;
-    }
+    .hint-text { font-size: 11px; color: var(--text-muted); line-height: 1.5; padding: 0 2px; }
 
-    /* --- TERMINAL (CLEAN LOOK) --- */
+    /* ===== CYBER TERMINAL ===== */
     .terminal {
-      background: #fafafa;
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      margin-top: 4px;
+      background: var(--term-bg); border: 1px solid var(--term-border);
+      border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
-    
     .term-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 14px;
-      background: #f1f1f4;
-      border-bottom: 1px solid var(--border-subtle);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 14px; background: var(--term-header); border-bottom: 1px solid var(--term-border);
     }
-    
-    .term-path {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
-    
+    .term-path { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); }
     .term-body {
-      padding: 14px;
-      font-family: var(--font-mono);
-      font-size: 13px;
-      line-height: 1.5;
-      color: #24292e;
-      white-space: pre-wrap;
-      word-break: break-all;
+      padding: 14px; font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      line-height: 1.6; color: var(--term-text); white-space: pre-wrap; word-break: break-all;
     }
-    
-    .term-body .cursor-blink {
-      display: inline-block;
-      width: 2px;
-      height: 14px;
-      background: var(--accent-blue);
-      vertical-align: middle;
-      margin-left: 4px;
+    .cursor-blink {
+      display: inline-block; width: 6px; height: 14px;
+      background: var(--term-text); vertical-align: middle; margin-left: 4px;
       animation: blink 1s step-end infinite;
     }
-    
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
+    @keyframes blink { 50% { opacity: 0; } }
 
-    /* --- BUTTONS & ACTIONS --- */
+    /* ===== BUTTONS ACTION ===== */
     .btn {
-      font-family: var(--font-sans);
-      font-size: 16px;
-      font-weight: 600;
-      padding: 14px 20px;
-      border-radius: var(--radius-md);
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: var(--transition);
-      width: 100%;
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
+      padding: 14px 20px; border-radius: 12px; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all 0.3s ease; width: 100%; letter-spacing: 0.3px;
     }
+    .btn-primary { background: var(--btn-primary); color: #ffffff; }
+    .btn-primary:hover { background: var(--btn-primary-hover); transform: translateY(-2px); }
+    .btn-primary:active { transform: translateY(0); }
     
-    .btn-primary {
-      background: var(--accent-blue);
-      color: #ffffff;
-    }
-    
-    .btn-primary:active {
-      background: #0062c4;
-    }
-    
-    .btn-secondary {
-      background: var(--accent-blue-soft);
-      color: var(--accent-blue);
-    }
-    
-    .btn-secondary:active {
-      background: #d0e5ff;
-    }
-    
-    .btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
+    .btn-secondary { background: var(--btn-secondary); color: var(--btn-secondary-text); border: 1px solid transparent; }
+    .btn-secondary:hover { border-color: var(--btn-secondary-text); }
 
-    /* --- STATUS MESSAGE --- */
-    .status-msg {
-      font-size: 13px;
-      padding: 12px;
-      border-radius: var(--radius-md);
-      margin-top: 12px;
-      display: none;
-      font-weight: 500;
-      line-height: 1.4;
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+
+    /* ===== STATUS MESSAGE ===== */
+    .status-msg { font-size: 12px; padding: 12px; border-radius: 10px; font-weight: 600; display: none; line-height: 1.4; }
+    .status-msg.show { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+    .status-msg.ok { background: rgba(31, 122, 77, 0.15); color: var(--accent-green); }
+    .status-msg.err { background: rgba(255, 59, 48, 0.15); color: var(--accent-red); }
+    .status-msg.info { background: var(--btn-secondary); color: var(--btn-secondary-text); }
+
+    /* ===== TOAST NOTIFICATION ===== */
+    .toast {
+      visibility: hidden; min-width: 200px; background: var(--toast-bg); color: #fff;
+      text-align: center; border-radius: 50px; padding: 12px 24px; position: fixed;
+      bottom: 30px; left: 50%; transform: translateX(-50%) translateY(10px);
+      opacity: 0; transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+      font-weight: 600; font-size: 13px; z-index: 999; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
-    
-    .status-msg.show {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .status-msg.ok {
-      background: #e6f9ed;
-      color: var(--accent-green);
-    }
-    
-    .status-msg.err {
-      background: #ffebeb;
-      color: var(--accent-red);
-    }
-    
-    .status-msg.info {
-      background: var(--accent-blue-soft);
-      color: var(--accent-blue);
+    .toast.show { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 480px) {
+      body { padding: 16px 12px; }
+      .card { padding: 22px 16px; border-radius: 16px; }
+      .form-row { grid-template-columns: 1fr; gap: 16px; }
     }
   </style>
 </head>
 <body>
 
+  <div id="splashScreen">
+    <div class="bubble"></div><div class="bubble"></div>
+    <div class="splash-container">
+      <div class="splash-logo"><span class="s-intra">INTRA</span><span class="s-dev">DEV</span></div>
+      <div class="splash-sub">Building Digital Environment</div>
+      <div class="splash-bar"></div>
+    </div>
+  </div>
+
+  <button class="dark-toggle" id="darkToggle" onclick="toggleDarkMode()">
+    <svg id="toggleIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    <svg id="toggleIconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <span class="toggle-label" id="toggleLabel">Terang</span>
+  </button>
+
   <div class="app-wrapper">
 
-    <!-- HEADER -->
     <header class="app-header">
-      <div class="brand">
-        <h1>Create User</h1>
-        <div class="sub">Database Management</div>
-      </div>
-      <span class="badge-version">v2.0</span>
+      <div class="brand-title"><span class="b-intra">INTRA</span><span class="b-dev">DEV</span></div>
+      <div class="slogan">Database Management System</div>
     </header>
 
-    <!-- CARD: DATA USER -->
-    <section class="card">
-      <div class="card-title"> Data User</div>
+    <section class="card" id="cardData">
+      <div class="card-title">Aktivasi User Baru</div>
       <div class="form-grid">
         
-        <!-- Row 1: Username & Password -->
         <div class="form-row">
           <div class="field">
-            <label for="username">Username</label>
+            <label for="username">Username / SN ONT</label>
             <div class="input-wrapper">
-              <input type="text" id="username" placeholder="SN ONT / Nama" />
+              <input type="text" id="username" placeholder="Contoh: ALCLB12345" />
             </div>
           </div>
           <div class="field">
             <label for="password">Password</label>
             <div class="input-wrapper">
-              <input type="text" id="password" placeholder="Acak" />
+              <input type="text" id="password" placeholder="Klik acak ⟳" />
               <button class="gen-btn" title="Generate password" onclick="genPassword()">⟳</button>
             </div>
           </div>
         </div>
 
-        <!-- Row 2: Service & Profile -->
         <div class="form-row">
           <div class="field">
-            <label>Service</label>
+            <label>Service Mode</label>
             <div class="service-badge">
               <span class="dot"></span> pppoe
             </div>
           </div>
           <div class="field">
-            <label>Profile</label>
+            <label>Profile Package</label>
             <div class="service-badge">
               <span class="dot"></span> pppoe
             </div>
           </div>
         </div>
 
-        <!-- Row 3: Local & Remote Address -->
         <div class="form-row">
           <div class="field">
             <label for="localAddress">Local IP <span class="opt">(Opsional)</span></label>
@@ -426,64 +346,75 @@
             <input type="text" id="remoteAddress" placeholder="10.20.30.15" />
           </div>
         </div>
-        <div class="hint-text">Kosongkan jika ingin menggunakan alamat otomatis dari Routerboard.</div>
+        <div class="hint-text">*Kosongkan IP jika ingin mendistribusikan IP Pool otomatis dari Routerboard.</div>
 
-        <!-- Row 4: Nama Pelanggan -->
         <div class="field">
-          <label for="comment">Nama Pelanggan / Keterangan</label>
-          <input type="text" id="comment" placeholder="Contoh - Jl. Melati No.5" />
+          <label for="comment">Nama Pelanggan & Keterangan Lokasi</label>
+          <input type="text" id="comment" placeholder="Contoh: Bpk. Dani - Jl. Merdeka No. 10" />
         </div>
 
-        <!-- TERMINAL PREVIEW -->
         <div class="terminal">
           <div class="term-header">
-            <span class="term-path">/ppp/secret preview</span>
+            <span class="term-path">/ppp/secret/preview-script</span>
           </div>
           <div class="term-body" id="termBody"></div>
         </div>
 
-        <!-- ACTION COPY -->
-        <button class="btn btn-secondary" onclick="copyScript()"> Salin Kode CLI</button>
+        <button class="btn btn-secondary" onclick="copyScript()">Salin Script CLI</button>
 
       </div>
     </section>
 
-    <!-- CARD: SEND TO ADMIN -->
-    <section class="card">
-      <div class="card-title"> Kirim Data</div>
+    <section class="card" id="cardSend">
+      <div class="card-title">Sinkronisasi & Kirim</div>
       <div class="form-grid">
         <div class="form-row">
           <div class="field">
-            <label for="senderName">Nama Pengirim</label>
-            <input type="text" id="senderName" placeholder="Nama Anda" />
+            <label for="senderName">Petugas Lapangan</label>
+            <input type="text" id="senderName" placeholder="Nama Lengkap" />
           </div>
           <div class="field">
-            <label for="senderSite">Lokasi / Tempat </label>
-            <input type="text" id="senderSite" placeholder=" LLG " />
+            <label for="senderSite">ID Node / Site ID</label>
+            <input type="text" id="senderSite" placeholder="Contoh: LLG / WTV" />
           </div>
         </div>
 
-        <button class="btn btn-primary" onclick="sendToAdmin()" id="btnSend">
-          Kirim 
-        </button>
-        
+        <button class="btn btn-primary" onclick="sendToAdmin()" id="btnSend">Kirim ke Sistem Pusat</button>
         <div class="status-msg" id="sendStatus"></div>
       </div>
     </section>
 
   </div>
 
-  <script>
-    /* =========================================================
-       KONFIGURASI TELEGRAM — GANTI DENGAN TOKEN & CHAT ID ANDA
-       ========================================================= */
-    const TELEGRAM_BOT_TOKEN = "8791910437:AAF5-pwMuLVeMxxOo4PVeyLiFDG_-HTAaW0";
-    const TELEGRAM_CHAT_ID = "8264592549";
+  <div id="toast" class="toast">Script berhasil disalin!</div>
 
-    // ---- HELPERS ----
-    function esc(v) {
-      return (v || '').toString().trim();
+  <script>
+    // ===== DURASI SPLASH SCREEN =====
+    setTimeout(function(){
+      document.getElementById('splashScreen').classList.add('hide');
+      document.getElementById('cardData').classList.add('show');
+      setTimeout(() => {
+        document.getElementById('cardSend').classList.add('show');
+      }, 1500);
+    }, 2000);
+
+    // ===== DARK MODE SENSING / TOGGLE =====
+    function toggleDarkMode(){
+      const body = document.body;
+      const sun = document.getElementById('toggleIconSun');
+      const moon = document.getElementById('toggleIconMoon');
+      const label = document.getElementById('toggleLabel');
+
+      body.classList.toggle('dark');
+      const isDark = body.classList.contains('dark');
+
+      sun.style.display = isDark ? 'none' : 'block';
+      moon.style.display = isDark ? 'block' : 'none';
+      label.textContent = isDark ? 'Gelap' : 'Terang';
     }
+
+    // ===== ENGINERING LOGIC =====
+    function esc(v) { return (v || '').toString().trim(); }
 
     function randomPassword(len = 8) {
       const chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789';
@@ -499,10 +430,9 @@
       renderAll();
     }
 
-    // ---- BUILD CLI ----
     function buildCli() {
-      const username = esc(document.getElementById('username').value) || '<ISI_USERNAME>';
-      const password = esc(document.getElementById('password').value) || '<ISI_PASSWORD>';
+      const username = esc(document.getElementById('username').value) || '<USERNAME>';
+      const password = esc(document.getElementById('password').value) || '<PASSWORD>';
       const local = esc(document.getElementById('localAddress').value);
       const remote = esc(document.getElementById('remoteAddress').value);
       const comment = esc(document.getElementById('comment').value);
@@ -514,7 +444,6 @@
       return cli;
     }
 
-    // ---- RENDER TERMINAL ----
     function renderAll() {
       const cli = buildCli();
       window.__latestCli = cli;
@@ -522,53 +451,56 @@
       term.innerHTML = cli.replace(/</g, '&lt;') + '<span class="cursor-blink"></span>';
     }
 
-    // ---- COPY ----
     function copyScript() {
       const text = window.__latestCli || '';
       navigator.clipboard.writeText(text).then(() => {
-        flashStatus('info', 'CLI disalin ke clipboard.');
+        showToast('Script CLI disalin ke clipboard!');
       }).catch(() => {
-        flashStatus('err', 'Gagal menyalin secara otomatis.');
+        showToast('Gagal menyalin otomatis.');
       });
     }
 
-    // ---- STATUS ----
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
     function flashStatus(type, msg) {
       const el = document.getElementById('sendStatus');
       el.className = 'status-msg show ' + type;
       el.textContent = msg;
     }
 
-    // ---- SEND TO TELEGRAM ----
-    async function sendToAdmin() {
-      if (TELEGRAM_BOT_TOKEN.startsWith('PASTE_') || TELEGRAM_CHAT_ID.startsWith('PASTE_')) {
-        flashStatus('err', 'Token Telegram belum diatur dengan benar.');
-        return;
-      }
+    // ===== BOT SYSTEM TELEGRAM =====
+    const TELEGRAM_BOT_TOKEN = "8791910437:AAF5-pwMuLVeMxxOo4PVeyLiFDG_-HTAaW0";
+    const TELEGRAM_CHAT_ID = "8264592549";
 
+    async function sendToAdmin() {
       const sender = esc(document.getElementById('senderName').value);
       const site = esc(document.getElementById('senderSite').value);
       const username = esc(document.getElementById('username').value);
 
       if (!sender || !site) {
-        flashStatus('err', ' Mohon isi Nama Pengirim dan Lokasi.');
+        flashStatus('err', '⚠️ Lengkapi Nama Petugas dan ID Node!');
         return;
       }
       if (!username) {
-        flashStatus('err', 'Mohon isi Username terlebih dahulu.');
+        flashStatus('err', '⚠️ Harap tentukan Username/SN ONT dahulu!');
         return;
       }
 
       const btn = document.getElementById('btnSend');
       btn.disabled = true;
-      flashStatus('info', 'Sedang mengirim...');
+      flashStatus('info', 'Mentransfer parameter data ke sistem...');
 
       const cli = window.__latestCli || buildCli();
       const text =
-        `*Request Create User* \n\n` +
-        `Pengirim: ${sender}\n` +
-        `Lokasi: ${site}\n\n` +
-        `*CLI:*\n` +
+        `⚡ *INTRADEV - REQUEST PPPoE Secret* ⚡\n\n` +
+        `👤 *Petugas:* ${sender}\n` +
+        `📍 *Node Site:* ${site}\n\n` +
+        `⚙️ *RouterOS Execution Command:*\n` +
         `\`\`\`\n${cli}\n\`\`\``;
 
       try {
@@ -583,25 +515,22 @@
         });
         const data = await res.json();
         if (data.ok) {
-          flashStatus('ok', ' Terkirim ke Database!');
+          flashStatus('ok', '✅ Data tersinkronisasi dan berhasil dikirim!');
         } else {
-          flashStatus('err', `Gagal: ${data.description || 'Terjadi kesalahan'}`);
+          flashStatus('err', `❌ Gagal: ${data.description || 'Sistem Error'}`);
         }
       } catch (err) {
-        flashStatus('err', 'Gagal mengirim. Periksa koneksi internet Anda.');
+        flashStatus('err', '❌ Masalah jaringan. Sinkronisasi gagal.');
       } finally {
         btn.disabled = false;
       }
     }
 
-    // ---- AUTO RENDER ON INPUT ----
     document.querySelectorAll('input').forEach(el => {
       el.addEventListener('input', renderAll);
     });
 
-    // ---- INIT ----
     renderAll();
   </script>
-
 </body>
 </html>
