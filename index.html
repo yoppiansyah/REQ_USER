@@ -379,7 +379,7 @@
 
     <!-- CARD: DATA USER -->
     <section class="card">
-      <div class="card-title"> 01. Data User</div>
+      <div class="card-title"> Data User</div>
       <div class="form-grid">
         
         <!-- Row 1: Username & Password -->
@@ -450,7 +450,7 @@
 
     <!-- CARD: SEND TO ADMIN -->
     <section class="card">
-      <div class="card-title"> 02. Kirim Data</div>
+      <div class="card-title"> Kirim Data</div>
       <div class="form-grid">
         <div class="form-row">
           <div class="field">
@@ -464,7 +464,7 @@
         </div>
 
         <button class="btn btn-primary" onclick="sendToAdmin()" id="btnSend">
-          Kirim Data Center
+          Kirim 
         </button>
         
         <div class="status-msg" id="sendStatus"></div>
@@ -561,7 +561,7 @@
 
       const btn = document.getElementById('btnSend');
       btn.disabled = true;
-      flashStatus('info', '⏳ Sedang mengirim...');
+      flashStatus('info', 'Sedang mengirim...');
 
       const cli = window.__latestCli || buildCli();
       const text =
